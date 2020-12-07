@@ -1,0 +1,18 @@
+<launch>
+  <!-- Show Gazebo GUI on launch -->
+  <include file="$(find simulation_map)/launch/test_map1_nogui.launch"/>
+
+  <include file="$(find simulate_robot_rl)/launch/spawn_robot.launch">
+    <arg name="x_pos" value="0.0"/>
+    <arg name="y_pos" value="0.0"/>
+    <arg name="z_pos" value="0.0"/> 
+  </include>
+
+  <include file="$(find simulate_robot_rl)/launch/robot_slam.launch"/>          
+  
+  <node pkg="rviz" type="rviz" name="rviz" required="true"
+    args="-d $(find simulate_robot_rl)/config/robot.rviz"/>
+  
+  <!--Start RL -->
+  <include file="$(find simulate_robot_rl)/launch/bringup_rl_worker.launch" /> 
+</launch>

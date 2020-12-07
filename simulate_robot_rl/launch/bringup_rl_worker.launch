@@ -1,0 +1,4 @@
+<launch>  
+  <!--Start RL -->
+  <node name ="agent" pkg="simulate_robot_rl" type="run_agent.sh" output="screen"/>
+</launch>
