@@ -1,22 +1,26 @@
 # ROS Path planning for SLAM by training a DQN model on Gazebo
-This ia a ROS workspace. it simulates Turtlebot3 movement on Gazebo and trains a rainforcement learning model DQN. 
-I mainly refer the thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD MAPS](https://www.researchgate.net/publication/343874756_REINFORCEMENT_LEARNING_HELPS_SLAM_LEARNING_TO_BUILD_MAPS)
+This ia a ROS meta package. it simulates Turtlebot3 movement on Gazebo and trains a rainforcement learning model DQN. 
+I mainly refer this thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD MAPS](https://www.researchgate.net/publication/343874756_REINFORCEMENT_LEARNING_HELPS_SLAM_LEARNING_TO_BUILD_MAPS)
 ![rviz](https://imgur.com/jkzsjpk.jpg)
 ## Description
-* **custom\_gmapping**: I added the map reset service and function to [gmapping](https://github.com/ros-perception/slam\_gmapping) 
-* **dqn\_for\_slam**: Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
-* **simulate\_robot\_rl**: The entry point of training. it runs ros, gazebo, rviz and other packages. 
-* **simulate\_map**: Map for simulation
+* **custom\_gmapping**: Its based on [gmapping](https://github.com/ros-perception/slam\_gmapping). I added the map reset service and function.
+* **dqn\_for\_slam**: Python package. Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
+* **simulate\_robot\_rl**: Ros package. The entry point of training. it runs ros, gazebo, rviz and other packages. 
+* **simulate\_map**: Ros package. Map for simulation
 ![graph](https://imgur.com/SeGLM1x.jpg) 
+## Dependency
+This application don't require GPU.
+I run on 
+* Ubuntu 18.04 
+* ROS melodic
 ## Usage
-Docker URL:
 Run trainning 
  ```bash
 cd ~/environment
 roslaunch simulate_robot_rl simulate_robot.launch
 ```
-## Note
-
+## License
+This library is licensed under the MIT License.
 
 ## Author
 mail to: 6318036@ed.tus.ac.jp
