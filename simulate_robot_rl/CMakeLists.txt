@@ -10,6 +10,7 @@ project(simulate_robot_rl)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
+  turtlebot3_description
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -25,7 +26,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  CATKIN_DEPENDS rospy std_msgs
+  CATKIN_DEPENDS rospy std_msgs turtlebot3_description
 )
 
 ###########
