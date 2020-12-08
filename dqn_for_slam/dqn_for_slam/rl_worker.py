@@ -2,12 +2,12 @@ import logging
 import gym
 import matplotlib.pyplot as plt
 import datetime
+import os
 
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import regularizers
-from tensorflow.keras.callbacks import History
 
 from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
@@ -21,6 +21,22 @@ ENV_NAME = 'RobotEnv-v0'
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+file_path = __file__
+dir_path = file_path[:(len(file_path) - len('rl_worker.py'))]
+MODELS_PATH = dir_path + 'models/'
+FIGURES_PATH = dir_path + 'figures/'
+
+
+def kill_all_node():
+    nodes = os.popen('rosnode list').readlines()
+    for i in range(len(nodes)):
+        nodes[i] = nodes[i].replace('\n', '')
+
+    for node in nodes:
+        os.system('rosnode kill ' + node)
+
 
 def main():
     logger.info({
@@ -37,9 +53,8 @@ def main():
     model.add(Dense(nb_actions, activation='linear'))
     print(model.summary())
 
-    memory = SequentialMemory(limit=62500, window_length=1)
+    memory = SequentialMemory(limit=100000, window_length=1)
     policy = CustomEpsGreedy(max_eps=0.6, min_eps=0.1, eps_decay=0.9997)
-    history = History()
 
     agent = DQNAgent(
         nb_actions=nb_actions,
@@ -51,37 +66,29 @@ def main():
 
     agent.compile(optimizer=Adam(lr=1e-3), metrics=['mae'])
 
-    agent.fit(env,
-              nb_steps=62500,
+    history = agent.fit(env,
+              nb_steps=100000,
               visualize=False,
-              nb_max_episode_steps=250,
-              log_interval=250,
-              verbose=1,
-              callbacks=[history])
+              nb_max_episode_steps=300,
+              log_interval=300,
+              verbose=1)
+
+    kill_all_node()
 
     dt_now = datetime.datetime.now()
-    agent.save_weights('../models/dpg_{}_weights_{}{}{}.h5f'.format(ENV_NAME, dt_now.month, dt_now.day, dt_now.hour), overwrite=True)
+    agent.save_weights(MODELS_PATH + 'dpg_{}_weights_{}{}{}.h5f'.format(ENV_NAME, dt_now.month, dt_now.day, dt_now.hour), overwrite=True)
     # agent.test(env, nb_episodes=5, visualize=False)
 
-    try:
-        fig = plt.figure()
-        plt.subplot(2, 1, 1)
-        plt.plot(history.history['nb_episode_step'])
-        plt.ylabel('step')
+    fig = plt.figure()
+    plt.plot(history.history['episode_reward'])
+    plt.xlabel("episode")
+    plt.ylabel("reward")
 
-        plt.subplot(2, 1, 2)
-        plt.plot(history.history['episode_reward'])
-        plt.xlabel('episode')
-        plt.ylabel('reward')
-        plt.show()
-
-        fig.savefig('../figures/learning_results_{}{}{}.png'
-                    .format(dt_now.month, dt_now.day, dt_now.hour))
-    except (AttributeError, TypeError) as ex:
-        logger.error({'type': ex,
-                      'message': 'history object has a problem'})
+    plt.savefig(FIGURES_PATH + 'learning_results_{}{}{}.png'
+                .format(dt_now.month, dt_now.day, dt_now.hour))
 
 
 
 if __name__ == '__main__':
     main()
+

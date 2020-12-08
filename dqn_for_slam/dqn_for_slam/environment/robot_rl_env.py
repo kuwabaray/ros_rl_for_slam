@@ -37,15 +37,15 @@ MIN_STEPS = 0
 MIN_MAP_COMPLETENESS = 0.
 
 MAP_SIZE_RATIO = 0.27
-
+MAX_STEPS_IN_EPS = 100
 MAP_COMPLETENESS_THRESHOLD = 0.65
 COLLISION_THRESHOLD = 0.2
 
 REWARD_MAP_COMPLETED = 1.
 REWARD_CRASHED = -1.
 
-SLEEP_BETWEEN_ACTION_AND_REWARD_CALCULATION = 0.5
-SLEEP_AFTER_RESET_TIME = 3
+SLEEP_BETWEEN_ACTION_AND_REWARD_CALCULATION = 0.3
+SLEEP_AFTER_RESET_TIME = 1
 
 
 
@@ -75,6 +75,7 @@ class RobotEnv(gym.Env):
         self.occupancy_grid = None
         self.done = False
         self.steps = MIN_STEPS
+        self.steps_in_episode = 0
         self.min_distance = 100
         self.reward_in_episode = 0
         self.last_map_completeness_pct = 0
@@ -132,7 +133,7 @@ class RobotEnv(gym.Env):
         self.done = False
         self.position = Point(INITIAL_POS_X, INITIAL_POS_Y, 0)
         self.orientation = Quaternion(0, 0, 0, 0)
-        self.steps = 0
+        self.steps_in_episode = 0
         self.map_completeness_pct = 0
         self.last_map_completeness_pct = 0
         self.reward_in_episode = 0
@@ -189,11 +190,10 @@ class RobotEnv(gym.Env):
         :return result:
         """
         if action == 0:  # turn left
-            steering = 1.0
+            steering = 1.159
             throttle = 0.08
         elif action == 1:  # turn right
-            # steering = -1.159
-            steering = -1.0
+            steering = -1.159
             throttle = 0.08
         elif action == 2:  # straight
             steering = 0
@@ -210,6 +210,7 @@ class RobotEnv(gym.Env):
         self.next_state = None
 
         self.steps += 1
+        self.steps_in_episode += 1
         self._send_action(steering, throttle)
         time.sleep(SLEEP_BETWEEN_ACTION_AND_REWARD_CALCULATION)
         self._update_map_completeness()
