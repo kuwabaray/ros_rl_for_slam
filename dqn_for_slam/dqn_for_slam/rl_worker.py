@@ -15,21 +15,22 @@ from rl.memory import SequentialMemory
 import dqn_for_slam.environment
 from dqn_for_slam.custom_policy import CustomEpsGreedy
 
-
 ENV_NAME = 'RobotEnv-v0'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-
 file_path = __file__
 dir_path = file_path[:(len(file_path) - len('rl_worker.py'))]
-MODELS_PATH = dir_path + 'models/'
+MODELS_PATH = dir_path + 'models/'   # model save directory
 FIGURES_PATH = dir_path + 'figures/'
 
 
-def kill_all_node():
+def kill_all_node() -> None:
+    """
+    kill all ros node except for roscore
+    """
     nodes = os.popen('rosnode list').readlines()
     for i in range(len(nodes)):
         nodes[i] = nodes[i].replace('\n', '')
@@ -38,16 +39,12 @@ def kill_all_node():
         os.system('rosnode kill ' + node)
 
 
-def main():
-    logger.info({
-        'action': 'main',
-        'status': 'run'
-    })
+def main() -> None:
     env = gym.make(ENV_NAME)
     nb_actions = env.action_space.n
 
     model = tf.keras.Sequential()
-    model.add(Flatten(input_shape= (1, ) + env.observation_space.shape))
+    model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
     model.add(Dense(512, activation='relu', kernel_regularizer=regularizers.l2(0.01)))
     model.add(Dense(512, activation='relu', kernel_regularizer=regularizers.l2(0.01)))
     model.add(Dense(nb_actions, activation='linear'))
@@ -67,16 +64,18 @@ def main():
     agent.compile(optimizer=Adam(lr=1e-3), metrics=['mae'])
 
     history = agent.fit(env,
-              nb_steps=100000,
-              visualize=False,
-              nb_max_episode_steps=300,
-              log_interval=300,
-              verbose=1)
+                        nb_steps=100000,
+                        visualize=False,
+                        nb_max_episode_steps=300,
+                        log_interval=300,
+                        verbose=1)
 
     kill_all_node()
 
     dt_now = datetime.datetime.now()
-    agent.save_weights(MODELS_PATH + 'dpg_{}_weights_{}{}{}.h5f'.format(ENV_NAME, dt_now.month, dt_now.day, dt_now.hour), overwrite=True)
+    agent.save_weights(
+        MODELS_PATH + 'dpg_{}_weights_{}{}{}.h5f'.format(ENV_NAME, dt_now.month, dt_now.day, dt_now.hour),
+        overwrite=True)
     # agent.test(env, nb_episodes=5, visualize=False)
 
     fig = plt.figure()
@@ -88,7 +87,5 @@ def main():
                 .format(dt_now.month, dt_now.day, dt_now.hour))
 
 
-
 if __name__ == '__main__':
     main()
-

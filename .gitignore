@@ -2,3 +2,4 @@ __pycache__/
 openslam_gmapping/
 dqn_for_slam/dqn_for_slam/models/
 /CMakeLists.txt
+*.png
