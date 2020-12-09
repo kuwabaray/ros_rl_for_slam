@@ -1,34 +1,34 @@
-sudo: required
-env:
-  variables:
-    ROS_VERSION: melodic
+arch: amd64
+os: linux
+dist: bionic
+language: generic
 
-phases:
-  install:
-    commands:
-      - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main\" > /etc/apt/sources.list.d/ros-latest.list"
-      - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-      - sudo apt-get update
-      - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_VERSION-desktop-full 
-      - sudo apt-get install -y python3-pip
-  pre_build:
-    commands:
-      - source /opt/ros/$ROS_DISTRO/setup.bash
-      - sudo rosdep init
-      - rosdep update
-      - mkdir -p ~/catkin_ws/src
-      - cd ~/catkin_ws/src
-      - catkin_init_workspace
-      - cd ~/catkin_ws
-      - catkin_make
-      - source devel/setup.bash
-      - cd ~/catkin_ws/src
-      - git clone https://github.com/kuwabaray/ros_rl_for_slam
-      - cd ros_rl_for_slam
-      - git clone https://github.com/ros-perception/openslam_gmapping.git
-      - rosdep install custom_gmapping simulate_robot_rl simulation_map
-      - python dqn_for_slam/setup.py install
-  build:
-    commands:
-      - cd ~/catkin_ws
-      - catkin_make
+env:
+  global:
+    -ROS_VERSION=melodic
+
+install:
+  - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main\" > /etc/apt/sources.list.d/ros-latest.list"
+  - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+  - sudo apt-get update
+  - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_VERSION-desktop-full 
+  - sudo apt-get install -y python3-pip
+pre_build:
+  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - sudo rosdep init
+  - rosdep update
+  - mkdir -p ~/catkin_ws/src
+  - cd ~/catkin_ws/src
+  - catkin_init_workspace
+  - cd ~/catkin_ws
+  - catkin_make
+  - source devel/setup.bash
+  - cd ~/catkin_ws/src
+  - git clone https://github.com/kuwabaray/ros_rl_for_slam
+  - cd ros_rl_for_slam
+  - git clone https://github.com/ros-perception/openslam_gmapping.git
+  - rosdep install custom_gmapping simulate_robot_rl simulation_map
+  - python dqn_for_slam/setup.py install
+build:
+  - cd ~/catkin_ws
+  - catkin_make
