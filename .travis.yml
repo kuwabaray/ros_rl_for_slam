@@ -28,7 +28,7 @@ install:
   - cd ros_rl_for_slam
   - git clone https://github.com/ros-perception/openslam_gmapping.git
   - rosdep install custom_gmapping simulate_robot_rl simulation_map
-  - python dqn_for_slam/setup.py install
+  - sudo python dqn_for_slam/setup.py install
 script:
   - cd ~/catkin_ws
   - catkin_make
