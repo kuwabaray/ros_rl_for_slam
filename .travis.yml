@@ -14,7 +14,7 @@ before_install:
   - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_VERSION-desktop-full 
   - sudo apt-get install -y python3-pip
 install:
-  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - source /opt/ros/$ROS_VERSION/setup.bash
   - sudo rosdep init
   - rosdep update
   - mkdir -p ~/catkin_ws/src
