@@ -30,7 +30,7 @@
 
 #include <ros/ros.h>
 #include "slam_gmapping.h"
-#include "custom_gmapping/SlamCmd.h" 
+#include "custom_gmapping/SlamCmd.h"
 
 ros::ServiceServer service_;
 

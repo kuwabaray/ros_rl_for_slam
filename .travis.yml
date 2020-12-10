@@ -1,34 +1,25 @@
 arch: amd64
 os: linux
 dist: bionic
-language: generic
+language: python
+python:
+  - "3.7"
+services:
+  - docker
 
 env:
-  global:
-    -ROS_VERSION=melodic
+  matrix:
+    -ROS_DISTRO="melodic"
 
 before_install:
-  - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main\" > /etc/apt/sources.list.d/ros-latest.list"
-  - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   - sudo apt-get update
-  - sudo apt-get install -y python3 python-catkin-pkg python-rosdep python-wstool ros-$ROS_VERSION-desktop-full 
-  - sudo apt-get install -y python3-pip
+  - sudo apt-get install -y python3-pip python3-setuptools
+  - sudo chown -R $USER:$USER /usr/lib/python3.7 
+  - mkdir -p /usr/lib/python3.7/site-packages
 install:
-  - source /opt/ros/$ROS_VERSION/setup.bash
-  - sudo rosdep init
-  - rosdep update
-  - mkdir -p ~/catkin_ws/src
-  - cd ~/catkin_ws/src
-  - catkin_init_workspace
-  - cd ~/catkin_ws
-  - catkin_make
-  - source devel/setup.bash
-  - cd ~/catkin_ws/src
-  - git clone https://github.com/kuwabaray/ros_rl_for_slam
-  - cd ros_rl_for_slam
-  - git clone https://github.com/ros-perception/openslam_gmapping.git
-  - rosdep install custom_gmapping simulate_robot_rl simulation_map
-  - sudo python dqn_for_slam/setup.py install
+  - pip3 install wheel
+  - pip3 install matplotlib==3.3.3 tensorflow gym==0.17.3 numpy==1.18.5 keras-rl2==1.0.4 rospkg==1.2.9
+  - pip3 install --upgrade tensorflow
+  - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
 script:
-  - cd ~/catkin_ws
-  - catkin_make
+  - .industrial_ci/travis.sh

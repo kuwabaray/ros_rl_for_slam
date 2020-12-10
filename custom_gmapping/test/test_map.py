@@ -40,7 +40,7 @@ import sys
 
 import roslib
 import os
-roslib.load_manifest('gmapping')
+roslib.load_manifest('custom_gmapping')
 import rostest
 
 class TestGmapping(unittest.TestCase):
@@ -92,8 +92,8 @@ class TestGmapping(unittest.TestCase):
         print 'Waiting for end time %.6f (current: %.6f)'%(target_time,(rospy.rostime.get_time() - start_time))
         time.sleep(0.1)
 
-    f0 = os.path.join(roslib.packages.get_pkg_dir('gmapping'),'test','basic_localization_stage_groundtruth')
-    f1 = os.path.join(roslib.packages.get_pkg_dir('gmapping'),'test','basic_localization_stage_generated')
+    f0 = os.path.join(roslib.packages.get_pkg_dir('custom_gmapping'),'test','basic_localization_stage_groundtruth')
+    f1 = os.path.join(roslib.packages.get_pkg_dir('custom_gmapping'),'test','basic_localization_stage_generated')
 
     cmd = ['rosrun', 'map_server', 'map_saver', 'map:=dynamic_map', '-f', f1]
     self.assertTrue(subprocess.call(cmd) == 0)
@@ -101,4 +101,4 @@ class TestGmapping(unittest.TestCase):
     self.cmp_maps(f0,f1)
 
 if __name__ == '__main__':
-  rostest.run('gmapping', 'gmapping_slam', TestGmapping, sys.argv)
+  rostest.run('custom_gmapping', 'gmapping_slam', TestGmapping, sys.argv)

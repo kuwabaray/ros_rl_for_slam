@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(custom_gmapping)
 
-find_package(catkin REQUIRED COMPONENTS nav_msgs std_srvs std_msgs nodelet openslam_gmapping roscpp tf rosbag_storage message_generation)
-
+find_package(catkin REQUIRED COMPONENTS 
+  nav_msgs std_srvs std_msgs nodelet openslam_gmapping roscpp tf rosbag_storage message_generation)
 find_package(Boost REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
-
-include_directories(src)
 
 add_service_files(
   FILES
@@ -21,10 +19,13 @@ generate_messages(
 
 catkin_package()
 
-add_executable(slam_gmapping src/slam_gmapping.cpp src/main.cpp)
-target_link_libraries(slam_gmapping ${Boost_LIBRARIES} ${catkin_LIBRARIES})
+
+
+add_executable(custom_gmapping src/slam_gmapping.cpp src/main.cpp)
+target_link_libraries(custom_gmapping ${Boost_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(custom_gmapping custom_gmapping_generate_messages_cpp)
 if(catkin_EXPORTED_TARGETS)
-  add_dependencies(slam_gmapping ${catkin_EXPORTED_TARGETS})
+  add_dependencies(custom_gmapping ${catkin_EXPORTED_TARGETS})
 endif()
 
 add_library(slam_gmapping_nodelet src/slam_gmapping.cpp src/nodelet.cpp)
@@ -36,7 +37,7 @@ if(catkin_EXPORTED_TARGETS)
 add_dependencies(slam_gmapping_replay ${catkin_EXPORTED_TARGETS})
 endif()
 
-install(TARGETS slam_gmapping slam_gmapping_nodelet slam_gmapping_replay
+install(TARGETS custom_gmapping slam_gmapping_nodelet slam_gmapping_replay
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -92,7 +93,7 @@ if(CATKIN_ENABLE_TESTING)
      ${PROJECT_NAME}_test_upside_down.bag
      ${PROJECT_NAME}_hallway_slow_2011-03-04-21-41-33.bag
      ${PROJECT_NAME}_basic_localization_stage_groundtruth.pgm
-     slam_gmapping
+     custom_gmapping
      slam_gmapping_replay
   )
   add_rostest(test/basic_localization_stage.launch DEPENDENCIES ${LOCAL_DEPENDENCIES})
