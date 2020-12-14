@@ -1,9 +1,7 @@
 arch: amd64
 os: linux
 dist: bionic
-language: python
-python:
-  - "3.7"
+language: generic
 services:
   - docker
 
@@ -13,13 +11,7 @@ env:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y python3-pip python3-setuptools
-  - sudo chown -R $USER:$USER /usr/lib/python3.7 
-  - mkdir -p /usr/lib/python3.7/site-packages
 install:
-  - pip3 install wheel
-  - pip3 install matplotlib==3.3.3 tensorflow gym==0.17.3 numpy==1.18.5 keras-rl2==1.0.4 rospkg==1.2.9
-  - pip3 install --upgrade tensorflow
   - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
 script:
   - .industrial_ci/travis.sh
