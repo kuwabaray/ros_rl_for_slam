@@ -1,0 +1,3 @@
+[submodule "slam_gmapping"]
+	path = slam_gmapping
+	url = https://github.com/kuwabaray/slam_gmapping
