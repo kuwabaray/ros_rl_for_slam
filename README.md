@@ -2,13 +2,13 @@
 # ROS Path planning for SLAM by training a DQN model on Gazebo
 This ia a ROS meta package. it simulates Turtlebot3 movement on Gazebo and trains a rainforcement learning model DQN.  
 I mainly refer this thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD MAPS](https://www.researchgate.net/publication/343874756_REINFORCEMENT_LEARNING_HELPS_SLAM_LEARNING_TO_BUILD_MAPS)  
-![rviz](https://imgur.com/TcuPW83)
+![rviz](https://i.imgur.com/TcuPW83.png)
 ## Description
 * **slam\_gmapping**: Its based on [gmapping](https://github.com/ros-perception/slam\_gmapping). I added the service and functions that reset a map data of gmapping.
 * **dqn\_for\_slam**: Python package. Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
 * **simulate\_robot\_rl**: Ros package. The entry point of training. it runs ros, gazebo, rviz and other packages. 
 * **simulate\_map**: Ros package. Map for simulation
-![graph](https://imgur.com/MtUxYwC) 
+![graph](https://i.imgur.com/MtUxYwC.png) 
 ## Dependency
 This application don't require GPU.
 I run on 
