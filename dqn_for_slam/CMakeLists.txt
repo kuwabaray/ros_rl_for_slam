@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
+if (POLICY CMP0048)
+  cmake_policy(SET CMP0048 NEW)
+endif (POLICY CMP0048)
 project(dqn_for_slam)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -21,7 +24,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES sample_py
 #  CATKIN_DEPENDS rospy std_msgs
-  DEPENDS rospy std_msgs geometry_msgs
+  DEPENDS rospy std_msgs 
 )
 
 include_directories(
