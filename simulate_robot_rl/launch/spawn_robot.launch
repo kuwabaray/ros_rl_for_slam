@@ -7,16 +7,23 @@
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="0.0"/>
  <!-- Spawn the robot into Gazebo with the turtlebot description -->
- <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" 
-    args="-urdf -param robot_description -model turtlebot3_burger
+ <param name="robot_description" command="$(find xacro)/xacro --inorder $(find rosbot_description)/urdf/rosbot.xacro" />
+ <node pkg="gazebo_ros" type="spawn_model" name="rosbot_spawn" 
+   args="-urdf -param robot_description -model rosbot
           -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) 
-          -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
-  <!-- 
+          -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)">
+  <remap from="tf" to="gazebo_tf" />
+  <remap from="odom" to="steer_drive_controller/odom" />
+ </node>
+ <!-- 
        Publish robot and joint states. This allows rviz to display robot data, and in 
        the robot's coordinate frame. These nodes could go into the robot application 
        .launch files instead.
-    -->
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+   -->
+ <rosparam command="load" file="$(find joint_state_controller)/joint_state_controller.yaml" />
+ <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="joint_state_controller" />
+
+ <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+   <param name="use_tf_static" value="false"/>
+ </node>
 </launch>

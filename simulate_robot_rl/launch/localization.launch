@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+      <rosparam command="load" file="$(find simulate_robot_rl)/config/localization.yaml" />
+      <remap from="/odometry/filtered" to="/fusion/odom" />
+      <param name="odom0" value="steer_drive_controller/odom" />
+      <param name="imu0"  value="imu" />
+    </node>
+</launch>
