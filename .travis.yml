@@ -1,6 +1,6 @@
 arch: amd64
 os: linux
-dist: bionic
+dist: focal
 language: generic
 services:
   - docker
