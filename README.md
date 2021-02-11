@@ -6,16 +6,24 @@ I mainly refer this thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD
 ## Description
 * **dqn\_for\_slam**: RL Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
 * **rosbot\_description**: Based on [rosbot\_description](https://github.com/husarion/rosbot_description). turned off camera and Infrared for computational load and reduced friction. 
-* **simulate\_robot\_rl**: The entry point of training
+* **simulate\_robot\_rl**: The entry point of training launches all nodes
 * **simulate\_map**: Map for simulation
 * **slam\_gmapping**: Based on [slam\_gmapping](https://github.com/ros-perception/slam\_gmapping). Added the service and functions that clear a map and restart gmapping.
+
+IMU and Wheel odometry are used for Localization. RPLidar is filtered for SLAM (gmapping). 
 ![graph](https://i.imgur.com/MtUxYwC.png) 
 ## Dependency
 This application don't require GPU.
-I run on 
+
+environment
 * Ubuntu 20.04 
 * ROS Noetic
-install frameworks to run 
+
+ros package
+* geometry2
+* openslam_gmapping
+
+install python frameworks to run 
 ```bash
 pip3 install matplotlib tensorflow gym numpy keras-rl2 rospkg
 pip3 install --upgrade tensorflow
