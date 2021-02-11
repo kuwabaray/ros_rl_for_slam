@@ -1,13 +1,14 @@
 [![Build Status](https://travis-ci.org/kuwabaray/ros_rl_for_slam.svg?branch=main)](https://travis-ci.org/kuwabaray/ros_rl_for_slam)
 # ROS Path planning for SLAM by training a DQN model on Gazebo
-This ia a ROS meta package. it simulates Turtlebot3 movement on Gazebo and trains a rainforcement learning model DQN.  
+It simulates Rosbot movement on Gazebo and trains a rainforcement learning model DQN.  
 I mainly refer this thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD MAPS](https://www.researchgate.net/publication/343874756_REINFORCEMENT_LEARNING_HELPS_SLAM_LEARNING_TO_BUILD_MAPS)  
 ![rviz](https://i.imgur.com/TcuPW83.png)
 ## Description
-* **slam\_gmapping**: Its based on [gmapping](https://github.com/ros-perception/slam\_gmapping). I added the service and functions that reset a map data of gmapping.
-* **dqn\_for\_slam**: Python package. Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
-* **simulate\_robot\_rl**: Ros package. The entry point of training. it runs ros, gazebo, rviz and other packages. 
-* **simulate\_map**: Ros package. Map for simulation
+* **dqn\_for\_slam**: RL Enviroment (gym) and trainig a DQN model (Keras-rl2, Tensorflow) 
+* **rosbot\_description**: Based on [rosbot\_description](https://github.com/husarion/rosbot_description). turned off camera and Infrared for computational load and reduced friction. 
+* **simulate\_robot\_rl**: The entry point of training
+* **simulate\_map**: Map for simulation
+* **slam\_gmapping**: Based on [slam\_gmapping](https://github.com/ros-perception/slam\_gmapping). Added the service and functions that clear a map and restart gmapping.
 ![graph](https://i.imgur.com/MtUxYwC.png) 
 ## Dependency
 This application don't require GPU.
