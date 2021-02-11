@@ -1,0 +1,14 @@
+<launch>
+  <remap from="tf" to="gazebo_tf"/>
+  <remap from="odom" to="steer_drive_controller/odom"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find simulation_map)/worlds/maze1.world"/>
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="false"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+    <arg name="verbose" value="true"/>
+  </include>
+</launch>
+
