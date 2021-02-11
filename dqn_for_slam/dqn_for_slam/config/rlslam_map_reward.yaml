@@ -1,0 +1,32 @@
+rlslam:
+  
+  steps_in_episode: 250
+  
+  initial_posx: 0.0
+  initial_posy: 0.0
+  
+  obs_space_max:
+    px: 5.
+    py: 5.
+    qz: inf
+   
+  obs_space_min:
+    px: -5.
+    py: -5.
+    qz: -inf
+
+  maze_size: 22  
+
+  scan_max_distance: 4.0
+  scan_min_distance: 0.2
+  training_image_size: 8
+  crash_distance: 0.21
+  map_completed_threshold: 85.
+  reward_map_completed: 10.
+  reward_crashed: -5.
+
+  steering: 0.8
+  throttle: 0.2 
+
+  timeout: 5.0
+  sleep_reset_time: 1.0

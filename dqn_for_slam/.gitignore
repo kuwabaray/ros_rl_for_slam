@@ -1,0 +1,3 @@
+__pycache__/
+dqn_for_slam/dqn_for_slam/models/*
+dqn_for_slam/dqn_for_slam/figures/*

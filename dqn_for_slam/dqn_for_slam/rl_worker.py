@@ -3,10 +3,11 @@ import gym
 import matplotlib.pyplot as plt
 import datetime
 import os
-
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras import regularizers
 
 from rl.agents.dqn import DQNAgent
@@ -27,19 +28,18 @@ MODELS_PATH = dir_path + 'models/'   # model save directory
 FIGURES_PATH = dir_path + 'figures/'
 
 
-def kill_all_node() -> None:
+def kill_all_nodes() -> None:
     """
     kill all ros node except for roscore
     """
     nodes = os.popen('rosnode list').readlines()
     for i in range(len(nodes)):
         nodes[i] = nodes[i].replace('\n', '')
-
     for node in nodes:
-        os.system('rosnode kill ' + node)
+        os.system('rosnode kill ' + node)    
 
 
-def main() -> None:
+if __name__ == '__main__':
     env = gym.make(ENV_NAME)
     nb_actions = env.action_space.n
 
@@ -63,14 +63,15 @@ def main() -> None:
 
     agent.compile(optimizer=Adam(lr=1e-3), metrics=['mae'])
 
+    # early_stopping = EarlyStopping(monitor='episode_reward', patience=0, verbose=1)
     history = agent.fit(env,
                         nb_steps=100000,
                         visualize=False,
-                        nb_max_episode_steps=300,
-                        log_interval=300,
+                        nb_max_episode_steps=250,
+                        log_interval=250,
                         verbose=1)
-
-    kill_all_node()
+    
+    kill_all_nodes()    
 
     dt_now = datetime.datetime.now()
     agent.save_weights(
@@ -83,9 +84,10 @@ def main() -> None:
     plt.xlabel("episode")
     plt.ylabel("reward")
 
+    #plt.subplot(2,1,2)
+    #plt.plot(data_range, map_stack.map_completeness)
+    #plt.xlabel('episode')
+    #plt.ylabel('map completeness')
+
     plt.savefig(FIGURES_PATH + 'learning_results_{}{}{}.png'
                 .format(dt_now.month, dt_now.day, dt_now.hour))
-
-
-if __name__ == '__main__':
-    main()
