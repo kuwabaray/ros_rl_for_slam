@@ -12,18 +12,16 @@ I mainly refer this thesis [REINFORCEMENT LEARNING HELPS SLAM: LEARNING TO BUILD
 ## Dependency
 This application don't require GPU.
 I run on 
-* Ubuntu 18.04 
-* ROS melodic
-* python 3.7
-install frameworks to run rl 
+* Ubuntu 20.04 
+* ROS Noetic
+install frameworks to run 
 ```bash
-pip3 install matplotlib==3.3.3 tensorflow gym==0.17.3 numpy==1.18.5 keras-rl2==1.0.4 rospkg==1.2.9
+pip3 install matplotlib tensorflow gym numpy keras-rl2 rospkg
 pip3 install --upgrade tensorflow
 ```
 ## Usage
 Run trainning 
  ```bash
-cd ~/environment
 roslaunch simulate_robot_rl simulate_robot.launch
 ```
 Trained models are saved to ~/dqn\_for\_slam/dqn\_for\_slam/models/  

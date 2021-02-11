@@ -7,7 +7,7 @@ services:
 
 env:
   matrix:
-    -ROS_DISTRO="melodic"
+    -ROS_DISTRO="noetic"
 
 before_install:
   - sudo apt-get update
