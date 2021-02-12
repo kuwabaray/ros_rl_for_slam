@@ -22,6 +22,7 @@ environment
 ros package
 * geometry2
 * openslam_gmapping
+* robot_localization
 
 install python frameworks to run 
 ```bash
