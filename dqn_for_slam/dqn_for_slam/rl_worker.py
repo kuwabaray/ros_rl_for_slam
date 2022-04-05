@@ -1,4 +1,5 @@
 import logging
+from random import randrange
 import gym
 import matplotlib.pyplot as plt
 import datetime
@@ -42,6 +43,10 @@ def kill_all_nodes() -> None:
 if __name__ == '__main__':
     env = gym.make(ENV_NAME)
     nb_actions = env.action_space.n
+    print("actions = ")
+    print(nb_actions)
+    print("Observation")
+    print(env.reset())
 
     model = tf.keras.Sequential()
     model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
@@ -51,7 +56,7 @@ if __name__ == '__main__':
     print(model.summary())
 
     memory = SequentialMemory(limit=100000, window_length=1)
-    policy = CustomEpsGreedy(max_eps=0.6, min_eps=0.1, eps_decay=0.9997)
+    policy = CustomEpsGreedy(max_eps=0.9, min_eps=0.1, eps_decay=0.9997)
 
     agent = DQNAgent(
         nb_actions=nb_actions,
@@ -62,16 +67,21 @@ if __name__ == '__main__':
         batch_size=64)
 
     agent.compile(optimizer=Adam(lr=1e-3), metrics=['mae'])
-
-    # early_stopping = EarlyStopping(monitor='episode_reward', patience=0, verbose=1)
-    history = agent.fit(env,
-                        nb_steps=100000,
-                        visualize=False,
-                        nb_max_episode_steps=250,
-                        log_interval=250,
-                        verbose=1)
+    for i in range(1000):
+        print(".")
     
-    kill_all_nodes()    
+    nb_steps=100000
+    nb_max_episode_steps=500
+    # early_stopping = EarlyStopping(monitor='episode_reward', patience=0, verbose=1)
+    history,map_completeness = agent.fit(env,
+                        nb_steps=nb_steps,
+                        visualize=False,
+                        nb_max_episode_steps=nb_max_episode_steps,
+                        log_interval=nb_max_episode_steps,
+                        verbose=1)
+    # print(map_completeness)
+    
+    # kill_all_nodes()    
 
     dt_now = datetime.datetime.now()
     agent.save_weights(
@@ -80,14 +90,20 @@ if __name__ == '__main__':
     # agent.test(env, nb_episodes=5, visualize=False)
 
     fig = plt.figure()
-    plt.plot(history.history['episode_reward'])
-    plt.xlabel("episode")
-    plt.ylabel("reward")
+    plt.plot(map_completeness)
+    plt.xlabel("episdoes")
+    plt.ylabel("map_completeness")
+    plt.show()
 
-    #plt.subplot(2,1,2)
-    #plt.plot(data_range, map_stack.map_completeness)
-    #plt.xlabel('episode')
-    #plt.ylabel('map completeness')
+    # fig, axs = plt.subplots(2)
+    # axs[0].plot(history.history['episode_reward'])
+    # axs[1].plot(map_completeness)
+    # axs[0].set(xlabel='', ylabel='Reward')
+    # axs[1].set(xlabel='episodes', ylabel='Map-Completeness ')
+    # plt.show()
+
+    agent.test(env, nb_episodes=5, visualize=False)
 
     plt.savefig(FIGURES_PATH + 'learning_results_{}{}{}.png'
                 .format(dt_now.month, dt_now.day, dt_now.hour))
+    kill_all_nodes() 

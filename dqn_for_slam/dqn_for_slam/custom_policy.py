@@ -26,4 +26,3 @@ class CustomEpsGreedy(Policy):
             self.eps = self.min_eps
 
         return action
-
