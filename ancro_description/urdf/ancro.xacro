@@ -1,0 +1,156 @@
+<?xml version="1.0" ?>
+<robot name="ancro" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find ancro_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find ancro_description)/urdf/ancro.trans" />
+<xacro:include filename="$(find ancro_description)/urdf/ancro.gazebo.xacro" />
+
+<link name="base_footprint"/>
+
+<joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0.0 0.0 0.010" rpy="0 0 -1.57"/>
+  </joint>
+
+<link name="base_link">
+  <inertial>
+    <origin rpy="0 0 0" xyz="2.360311031961313e-06 3.348856490864264e-10 0.1823972044211784"/>
+    <mass value="10.987205181570816"/>
+    <inertia ixx="0.580104" ixy="3e-05" ixz="4e-06" iyy="0.584543" iyz="0.0" izz="0.309516"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="right_wheel_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.00611814035603947 -3.5827692354705325e-18 -1.3642559304472002e-13"/>
+    <mass value="0.22634609582436735"/>
+    <inertia ixx="0.000272" ixy="-0.0" ixz="0.0" iyy="0.000152" iyz="-0.0" izz="0.000152"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.17 -0.0 -0.05"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.17 -0.0 -0.05"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="left_wheel_1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.006118140356039359 3.5827692354705325e-18 -1.3665457654354896e-13"/>
+    <mass value="0.22634609582436735"/>
+    <inertia ixx="0.000272" ixy="-0.0" ixz="-0.0" iyy="0.000152" iyz="-0.0" izz="0.000152"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0.17 -0.0 -0.05"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0.17 -0.0 -0.05"/>
+    <geometry>
+      <mesh filename="package://ancro_description/meshes/left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lidar_1">
+    <visual>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0315" radius="0.025"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.03" radius="0.025"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.114" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0"
+               izz="0.001" />
+    </inertial>
+  </link>
+
+<link name="camera">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <mass value="0.0"/>
+    <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+  </inertial>
+  <visual name="">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <geometry>
+      <box size="0.05 0.05 0.025"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <geometry>
+      <box size="0.0 0.0 0.0"/>
+    </geometry>
+  </collision>
+</link>
+<joint name="camera_joint" type="fixed">
+  <origin xyz="0 0.2 0.535" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="camera"/>
+</joint>
+
+
+<joint name="Rev1" type="continuous">
+  <origin rpy="0 0 0" xyz="0.17 0.0 0.05"/>
+  <parent link="base_link"/>
+  <child link="right_wheel_1"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit effort="100" velocity="100"/>
+  <joint_properties damping="20.0" friction="0.8"/>
+</joint>
+
+
+<joint name="Rev2" type="continuous">
+  <origin rpy="0 0 0" xyz="-0.17 0.0 0.05"/>
+  <parent link="base_link"/>
+  <child link="left_wheel_1"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit effort="100" velocity="100"/>
+  <joint_properties damping="20.0" friction="0.8"/>
+</joint>
+
+
+<joint name="Rigid4" type="fixed">
+  <origin rpy="0 0 0" xyz="0.0 0.0 0.550"/>
+  <parent link="base_link"/>
+  <child link="lidar_1"/>
+</joint>
+
+
+</robot>

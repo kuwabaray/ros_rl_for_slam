@@ -311,7 +311,7 @@ class RobotEnv(gym.Env):
             current_odometry = None
             while current_odometry is None and not rospy.is_shutdown():
                 try:
-                    current_odometry = rospy.wait_for_message("/steer_drive_controller/odom", Odometry, timeout=TIMEOUT)
+                    current_odometry = rospy.wait_for_message("odom", Odometry, timeout=TIMEOUT)
 
                 except:
                     rospy.logerr("Current /odom not ready yet, retrying for getting odom")
@@ -365,12 +365,12 @@ class RobotEnv(gym.Env):
                 pass
 
         sensor_state = []
-        self.min_distance = LIDAR_SCAN_MAX_DISTANCE
+        self.min_distance = LIDAR_SCAN_MIN_DISTANCE
         mod = len(data.ranges)/TRAINING_IMAGE_SIZE
         for i, item in enumerate(data.ranges):
             if (i%mod==0):
                 if np.isnan(data.ranges[i]):
-                    sensor_state.append(LIDAR_SCAN_MAX_DISTANCE + 1.0)
+                    sensor_state.append(LIDAR_SCAN_MIN_DISTANCE + 1.0)
                 else:
                     sensor_state.append(data.ranges[i])
             if self.min_distance > data.ranges[i]:

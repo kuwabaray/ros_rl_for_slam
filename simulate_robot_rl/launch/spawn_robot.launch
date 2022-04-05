@@ -7,13 +7,13 @@
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="0.0"/>
  <!-- Spawn the robot into Gazebo with the turtlebot description -->
- <param name="robot_description" command="$(find xacro)/xacro --inorder $(find rosbot_description)/urdf/rosbot.xacro" />
+ <param name="robot_description" command="$(find xacro)/xacro --inorder $(find ancro_description)/urdf/ancro-copy.xacro" />
  <node pkg="gazebo_ros" type="spawn_model" name="rosbot_spawn" 
    args="-urdf -param robot_description -model rosbot
           -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) 
           -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)">
   <remap from="tf" to="gazebo_tf" />
-  <remap from="odom" to="steer_drive_controller/odom" />
+  <remap from="odom" to="odom" />
  </node>
  <!-- 
        Publish robot and joint states. This allows rviz to display robot data, and in 
